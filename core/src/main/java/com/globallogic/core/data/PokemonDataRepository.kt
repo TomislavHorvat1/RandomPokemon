@@ -2,7 +2,6 @@ package com.globallogic.core.data
 
 import com.globallogic.core.domain.Pokemon
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.single
 
 class PokemonDataRepository private constructor(
     private val localDataSource: PokemonCacheSource,
@@ -19,28 +18,39 @@ class PokemonDataRepository private constructor(
         )
     }
 
+    var isFirstRun = true
     var isCacheDirty = true
 
-    override suspend fun getPokemon(pokemonId: Int): Flow<Pokemon> =
-        if (isCacheDirty) getPokemonFromServer(pokemonId = pokemonId)
-        else getPokemonFromLocalStorage(pokemonId = pokemonId)
+    override suspend fun getPokemonCount(): Flow<Int> {
+        if (isFirstRun)
+            getPokemonCountFromServer().collect {
+                localDataSource.setPokemonCount(it)
+            }
 
-
-    private suspend fun getPokemonFromServer(
-        pokemonId: Int,
-    ): Flow<Pokemon> {
-        val pokemon = remoteDataSource.getPokemon(
-            pokemonId = pokemonId,
-        )
-        localDataSource.savePokemon(pokemon = pokemon.single())
-
-        return pokemon
+        return getPokemonCountFromConfig()
     }
 
-    private suspend fun getPokemonFromLocalStorage(
-        pokemonId: Int,
-    ): Flow<Pokemon> =
-        localDataSource.getPokemon(
-            pokemonId = pokemonId,
-        )
+    override suspend fun getPokemon(pokemonId: Int): Flow<Pokemon> {
+        if (isCacheDirty) {
+            getPokemonFromServer(pokemonId = pokemonId).collect {
+                localDataSource.savePokemon(it)
+            }
+        }
+
+        return getPokemonFromLocalStorage(pokemonId = pokemonId)
+    }
+
+
+    private suspend fun getPokemonCountFromServer(): Flow<Int> {
+        isFirstRun = false
+        return remoteDataSource.getPokemonCount()
+    }
+
+    private suspend fun getPokemonCountFromConfig(): Flow<Int> = localDataSource.getPokemonCount()
+
+    private suspend fun getPokemonFromServer(pokemonId: Int): Flow<Pokemon> =
+        remoteDataSource.getPokemon(pokemonId = pokemonId)
+
+    private suspend fun getPokemonFromLocalStorage(pokemonId: Int): Flow<Pokemon> =
+        localDataSource.getPokemon(pokemonId = pokemonId)
 }

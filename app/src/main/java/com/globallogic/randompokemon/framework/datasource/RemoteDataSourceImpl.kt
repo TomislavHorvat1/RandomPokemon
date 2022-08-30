@@ -9,4 +9,8 @@ class RemoteDataSourceImpl : PokemonDataSource {
     override suspend fun getPokemon(pokemonId: Int): Flow<Pokemon> = flow {
         emit(Pokemon("remote"))
     }
+
+    override suspend fun getPokemonCount(): Flow<Int> = flow {
+        emit(1234)
+    }
 }
