@@ -1,15 +1,17 @@
 package com.globallogic.core.data
 
 import com.globallogic.core.domain.Pokemon
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.single
 
 class PokemonDataRepository private constructor(
-    private val localDataSource: PokemonDataSource,
+    private val localDataSource: PokemonCacheSource,
     private val remoteDataSource: PokemonDataSource,
 ) : PokemonDataSource {
 
     companion object {
         fun getInstance(
-            localDataSource: PokemonDataSource,
+            localDataSource: PokemonCacheSource,
             remoteDataSource: PokemonDataSource,
         ): PokemonDataRepository = PokemonDataRepository(
             localDataSource = localDataSource,
@@ -17,35 +19,28 @@ class PokemonDataRepository private constructor(
         )
     }
 
-    val isCacheDirty = false
+    var isCacheDirty = true
 
-    override fun getPokemon(pokemonId: Int, callback: PokemonDataSource.LoadPokemonCallback) {
-        if (isCacheDirty) {
-            getPokemonFromServer(
-                pokemonId = pokemonId,
-                callback = callback,
-            )
-        } else {
-            getPokemonFromLocalStorage(
-                pokemonId = pokemonId,
-                callback = callback,
-            )
-        }
-    }
+    override suspend fun getPokemon(pokemonId: Int): Flow<Pokemon> =
+        if (isCacheDirty) getPokemonFromServer(pokemonId = pokemonId)
+        else getPokemonFromLocalStorage(pokemonId = pokemonId)
 
-    private fun getPokemonFromServer(
+
+    private suspend fun getPokemonFromServer(
         pokemonId: Int,
-        callback: PokemonDataSource.LoadPokemonCallback
-    ) {
+    ): Flow<Pokemon> {
+        val pokemon = remoteDataSource.getPokemon(
+            pokemonId = pokemonId,
+        )
+        localDataSource.savePokemon(pokemon = pokemon.single())
 
-
-        // TODO cache after get
+        return pokemon
     }
 
-    private fun getPokemonFromLocalStorage(
+    private suspend fun getPokemonFromLocalStorage(
         pokemonId: Int,
-        callback: PokemonDataSource.LoadPokemonCallback,
-    ) {
-
-    }
+    ): Flow<Pokemon> =
+        localDataSource.getPokemon(
+            pokemonId = pokemonId,
+        )
 }
