@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.globallogic.randompokemon"
         minSdk 27
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -46,17 +46,26 @@ android {
 }
 
 dependencies {
+    // region KTX
+    implementation "androidx.core:core-ktx:$ktx_dependencies.core"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$ktx_dependencies.lifecycle_runtime"
+    // endregion
+    // region COMPOSE
+    implementation "androidx.compose.ui:ui:$compose_dependencies.ui"
+    implementation "androidx.compose.material:material:$compose_dependencies.material"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_dependencies.ui_tooling_preview"
+    implementation "androidx.activity:activity-compose:$compose_dependencies.activity"
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.material:material:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.activity:activity-compose:1.3.1'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_test_dependencies.ui_test_junit4"
+
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_debug_dependencies.ui_tooling"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_debug_dependencies.ui_test_manifest"
+    // endregion
+    // region JUNIT
+    testImplementation "junit:junit:$junit4_version"
+    androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
+    // endregion
+    // region ESPRESSO
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
+    // endregion
 }
