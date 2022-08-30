@@ -46,6 +46,7 @@ android {
 }
 
 dependencies {
+    implementation project(path: ':core')
     // region KTX
     implementation "androidx.core:core-ktx:$ktx_dependencies.core"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$ktx_dependencies.lifecycle_runtime"
