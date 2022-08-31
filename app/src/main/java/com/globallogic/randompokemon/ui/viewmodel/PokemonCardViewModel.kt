@@ -3,27 +3,30 @@ package com.globallogic.randompokemon.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.globallogic.core.usecase.GetPokemon
-import com.globallogic.core.usecase.GetPokemonCount
+import com.globallogic.core.usecase.GetPokeIndex
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class PokemonCardViewModel(
-    private val getPokemonCount: GetPokemonCount,
-    private val getPokemon: GetPokemon
+    private val getPokemon: GetPokemon,
+    private val getPokeIndex: GetPokeIndex
 ) : ViewModel() {
-    fun getPokemonCount() {
+    fun checkPokeIndex(){
         viewModelScope.launch {
-            getPokemonCount.invoke().collect {
-                Timber.d("$it")
+            try {
+                getPokeIndex.invoke(false).collect{
+                    Timber.d("$it")
+                }
+            }catch (e: Error){
+
             }
         }
     }
-
     fun getRandomPokemon() {
         viewModelScope.launch {
             try {
-                getPokemon.invoke(1).collect {
-                    Timber.d("$it")
+                getPokemon.invoke(pokemonId = 1).collect {
+                    Timber.d(it.name)
                 }
             } catch (e: Error) {
                 Timber.e(e)

@@ -1,7 +1,10 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
+
+def API_URL = "https://pokeapi.co/api/v2/"
 
 android {
     compileSdk 33
@@ -17,6 +20,8 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+        buildConfigField "String", "API_URL", "\"$API_URL\""
     }
 
     buildTypes {
@@ -76,6 +81,7 @@ dependencies {
     // endregion
     // region MOSHI
     implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
     // endregion
     // region ROOM
     implementation "androidx.room:room-runtime:$room_version"

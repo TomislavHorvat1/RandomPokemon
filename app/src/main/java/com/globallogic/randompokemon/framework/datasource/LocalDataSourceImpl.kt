@@ -1,32 +1,26 @@
 package com.globallogic.randompokemon.framework.datasource
 
-import android.content.Context
-import com.globallogic.core.data.PokemonCacheSource
+import com.globallogic.core.data.PokemonDataSource
+import com.globallogic.core.domain.PokeIndex
 import com.globallogic.core.domain.Pokemon
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class LocalDataSourceImpl(context: Context) : PokemonCacheSource {
-    companion object {
-        private const val PREFS_FILE = "config"
-        private const val POKEMON_COUNT = "pokemon_count"
+class LocalDataSourceImpl() : PokemonDataSource {
+    override suspend fun getPokemon(fromCache: Boolean, pokemonId: Int): Flow<Pokemon> =
+        flow {
+            TODO()
+        }
+
+    override suspend fun getPokeIndex(fromCache: Boolean): Flow<PokeIndex> = flow {
+        TODO()
     }
 
-    private val prefs = context.getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE)
-
-    override suspend fun getPokemonCount(): Flow<Int> = flow {
-        prefs.getInt(POKEMON_COUNT, 1154)
+    override fun cachePokemon(pokemon: Pokemon) {
+        TODO()
     }
 
-    override suspend fun setPokemonCount(pokemonCount: Int) {
-        prefs.edit().putInt(POKEMON_COUNT, pokemonCount).apply()
-    }
-
-    override suspend fun getPokemon(pokemonId: Int): Flow<Pokemon> = flow {
-        emit(Pokemon("local"))
-    }
-
-    override fun savePokemon(pokemon: Pokemon) {
-
+    override fun cachePokeIndex(pokeIndex: PokeIndex) {
+        TODO("Not yet implemented")
     }
 }
