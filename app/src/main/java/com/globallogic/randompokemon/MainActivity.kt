@@ -21,9 +21,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.checkPokeIndex()
-        viewModel.getRandomPokemon()
-
         setContent {
             RandomPokemonTheme {
                 Surface(
@@ -34,6 +31,9 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        viewModel.checkPokeIndex()
+        viewModel.getRandomPokemon()
     }
 }
 

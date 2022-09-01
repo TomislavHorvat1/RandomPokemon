@@ -22,7 +22,7 @@ class RemoteDataSourceImpl(
         // do nothing
     }
 
-    override fun cachePokeIndex(pokeIndex: PokeIndex) {
+    override fun cachePokeIndex(pokeIndex: PokeIndex): Flow<Boolean> = flow {
         // do nothing
     }
 }

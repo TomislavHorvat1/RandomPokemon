@@ -23,7 +23,7 @@ class PokemonDataRepository private constructor(
         if (fromCache) localDataSource.getPokemon(pokemonId = pokemonId)
         else remoteDataSource.getPokemon(pokemonId = pokemonId)
 
-    override suspend fun getPokeIndex(fromCache: Boolean): Flow<PokeIndex> =
+    override suspend fun getPokeIndex(fromCache: Boolean): Flow<PokeIndex?> =
         if (fromCache) localDataSource.getPokeIndex()
         else remoteDataSource.getPokeIndex()
 
@@ -31,7 +31,6 @@ class PokemonDataRepository private constructor(
         localDataSource.cachePokemon(pokemon = pokemon)
     }
 
-    override fun cachePokeIndex(pokeIndex: PokeIndex) {
+    override fun cachePokeIndex(pokeIndex: PokeIndex): Flow<Boolean> =
         localDataSource.cachePokeIndex(pokeIndex = pokeIndex)
-    }
 }
