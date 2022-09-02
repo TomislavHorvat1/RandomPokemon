@@ -18,7 +18,7 @@ class RemoteDataSourceImpl(
         emit(api.getPokeIndex().toObject())
     }
 
-    override fun cachePokemon(pokemon: Pokemon) {
+    override suspend fun cachePokemon(pokemon: Pokemon): Flow<Any?> = flow {
         // do nothing
     }
 

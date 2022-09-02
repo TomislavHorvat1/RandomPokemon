@@ -7,7 +7,7 @@ import com.squareup.moshi.JsonClass
 data class BaseDescriptionDto(
     val name: String,
     val url: String,
-) : ApiDto<BaseDescription>() {
+) : Dto<BaseDescription> {
     override fun toObject() = BaseDescription(
         name = name,
         url = url,

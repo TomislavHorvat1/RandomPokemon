@@ -7,7 +7,7 @@ import com.squareup.moshi.JsonClass
 data class MoveDto(
     val move: BaseDescriptionDto,
     val version_group_details: List<VersionGroupDetailDto>?,
-) : ApiDto<Move>() {
+) : Dto<Move> {
     override fun toObject() = Move(
         move = move.toObject(),
         versionGroupDetail = version_group_details?.map { it.toObject() },

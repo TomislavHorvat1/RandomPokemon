@@ -9,7 +9,7 @@ import java.util.*
 data class PokeIndexDto(
     val count: Int,
     val results: List<BaseDescriptionDto>,
-) : ApiDto<PokeIndex>() {
+) : Dto<PokeIndex> {
     override fun toObject() = PokeIndex(
         count = count,
         indexes = results.map {
