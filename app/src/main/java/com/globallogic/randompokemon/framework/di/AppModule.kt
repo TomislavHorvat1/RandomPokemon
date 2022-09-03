@@ -13,7 +13,8 @@ import com.globallogic.randompokemon.framework.datasource.LocalDataSourceImpl
 import com.globallogic.randompokemon.framework.datasource.RemoteDataSourceImpl
 import com.globallogic.randompokemon.framework.manager.PrefsManager
 import com.globallogic.randompokemon.framework.provider.*
-import com.globallogic.randompokemon.ui.viewmodel.PokemonCardViewModel
+import com.globallogic.randompokemon.ui.viewmodel.PokemonScreenViewModel
+import com.globallogic.randompokemon.ui.viewmodel.PokemonViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -62,11 +63,15 @@ val appModule = module {
     single { provideDao(get()) }
 
     viewModel {
-        PokemonCardViewModel(
+        PokemonViewModel(
             getPokemon = get(),
             cachePokemon = get(),
             getPokeIndex = get(),
             cachePokeIndex = get(),
         )
+    }
+
+    viewModel {
+        PokemonScreenViewModel()
     }
 }

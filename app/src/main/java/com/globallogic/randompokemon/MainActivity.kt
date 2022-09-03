@@ -6,30 +6,30 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Observer
 import com.globallogic.core.domain.PokeIndex
 import com.globallogic.randompokemon.ui.theme.RandomPokemonTheme
-import com.globallogic.randompokemon.ui.viewmodel.PokemonCardViewModel
+import com.globallogic.randompokemon.ui.view.MainScreen
+import com.globallogic.randompokemon.ui.viewmodel.PokemonScreenViewModel
+import com.globallogic.randompokemon.ui.viewmodel.PokemonViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: PokemonCardViewModel by viewModel()
+    private val pokemonViewModel: PokemonViewModel by viewModel()
+    private val pokemonScreenViewModel: PokemonScreenViewModel by viewModel()
 
     private val isPokeIndexCachedObserver = Observer<Boolean> {
-        if (!it) viewModel.getPokeIndex(false)
+        if (!it) pokemonViewModel.getPokeIndex(false)
     }
 
     private val pokeIndexObserver = Observer<PokeIndex?> {
-        it?.run { viewModel.getRandomPokemon() }
+        it?.run { pokemonViewModel.getRandomPokemon() }
     }
 
     private val failedFetchPokemonObserver = Observer<Int?> {
-        it?.run { viewModel.getRandomPokemon(false) }
+        it?.run { pokemonViewModel.getRandomPokemon(false) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,30 +43,20 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting(name = "Android")
+                    MainScreen(
+                        pokemonViewModel = pokemonViewModel,
+                        pokemonScreenViewModel = pokemonScreenViewModel,
+                    )
                 }
             }
         }
 
-        viewModel.getPokeIndex()
+        pokemonViewModel.getPokeIndex()
     }
 
     private fun setObservers() {
-        viewModel.isPokeIndexCached.observe(this, isPokeIndexCachedObserver)
-        viewModel.pokeIndex.observe(this, pokeIndexObserver)
-        viewModel.failedFetchPokemonId.observe(this, failedFetchPokemonObserver)
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    RandomPokemonTheme {
-        Greeting("Android")
+        pokemonViewModel.isPokeIndexCached.observe(this, isPokeIndexCachedObserver)
+        pokemonViewModel.pokeIndex.observe(this, pokeIndexObserver)
+        pokemonViewModel.failedFetchPokemonId.observe(this, failedFetchPokemonObserver)
     }
 }

@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 
-class PokemonCardViewModel(
+class PokemonViewModel(
     private val getPokemon: GetPokemon,
     private val cachePokemon: CachePokemon,
     private val getPokeIndex: GetPokeIndex,

@@ -46,8 +46,8 @@ ext {
     // region RETROFIT
     retrofit_version = '2.9.0'
     // endregion
-    // region GLIDE
-    glide_version = '4.13.2'
+    // region COIL
+    coil_version = '2.2.0'
     // endregion
     // region JUNIT
     junit4_version = '4.13.2'
