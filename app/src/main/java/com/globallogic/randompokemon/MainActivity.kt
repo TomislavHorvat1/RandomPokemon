@@ -14,6 +14,7 @@ import com.globallogic.randompokemon.ui.view.MainScreen
 import com.globallogic.randompokemon.ui.viewmodel.PokemonScreenViewModel
 import com.globallogic.randompokemon.ui.viewmodel.PokemonViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
 
