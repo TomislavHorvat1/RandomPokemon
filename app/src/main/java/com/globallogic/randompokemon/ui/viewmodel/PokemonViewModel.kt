@@ -102,14 +102,16 @@ class PokemonViewModel(
                     fromCache = false,
                     pokemonId = pokemonId,
                 ).catch {
-                    TODO("catch network errors")
+                    // Retry
+                    getRandomPokemon()
                 }.collect {
                     it?.let {
                         cachePokemon.invoke(pokemon = it).collect()
                         _pokemon.value = it
                         _failedFetchPokemonId.value = null
                     } ?: run {
-                        TODO("server is reachable but the pokemon is otherwise unavailable")
+                        // Retry
+                        getRandomPokemon()
                     }
                 }
             } catch (e: Error) {

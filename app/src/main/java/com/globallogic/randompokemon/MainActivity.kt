@@ -11,15 +11,12 @@ import androidx.lifecycle.Observer
 import com.globallogic.core.domain.PokeIndex
 import com.globallogic.randompokemon.ui.theme.RandomPokemonTheme
 import com.globallogic.randompokemon.ui.view.MainScreen
-import com.globallogic.randompokemon.ui.viewmodel.PokemonScreenViewModel
 import com.globallogic.randompokemon.ui.viewmodel.PokemonViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
 
     private val pokemonViewModel: PokemonViewModel by viewModel()
-    private val pokemonScreenViewModel: PokemonScreenViewModel by viewModel()
 
     private val isPokeIndexCachedObserver = Observer<Boolean> {
         if (!it) pokemonViewModel.getPokeIndex(false)
@@ -44,10 +41,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainScreen(
-                        pokemonViewModel = pokemonViewModel,
-                        pokemonScreenViewModel = pokemonScreenViewModel,
-                    )
+                    MainScreen(pokemonViewModel = pokemonViewModel)
                 }
             }
         }

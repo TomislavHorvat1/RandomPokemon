@@ -15,7 +15,7 @@ val Typography = Typography(
         fontSize = 16.sp
     ),
     h5 = TextStyle(
-        color = Color.Gray,
+        color = Color.DarkGray,
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Bold,
         fontSize = 28.sp
