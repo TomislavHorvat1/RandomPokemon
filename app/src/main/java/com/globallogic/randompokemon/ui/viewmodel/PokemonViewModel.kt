@@ -41,19 +41,21 @@ class PokemonViewModel(
     val pokemon: LiveData<Pokemon> = _pokemon
 
     /**
-     * Gets the pokemon index from a local or remote source depending on the flag.
+     * Attempts to load the pokemon index from cache or server when the activity resumes if the pokemon index is null
      */
-    fun getPokeIndex(fromCache: Boolean = true) {
-        if (fromCache) getPokeIndexFromCache()
-        else getPokeIndexFromRemote()
+    fun onActivityResumed(tryCache: Boolean = true) {
+        pokeIndex.value ?: run {
+            if (tryCache) getPokeIndexFromCache()
+            else getPokeIndexFromRemote()
+        }
     }
 
     /**
-     * Gets a random pokemon from a local or remote source depending on the flag.
+     * Attempts to load a random pokemon from cache or server on a button click
      */
-    fun getRandomPokemon(fromCache: Boolean = true) {
+    fun onGetPokemonClicked(tryCache: Boolean = true) {
         pokeIndex.value?.let { pokeIndex ->
-            if (fromCache) getPokemonFromCache(pokemonId = pokeIndex.getRandomId())
+            if (tryCache) getPokemonFromCache(pokemonId = pokeIndex.getRandomId())
             else getPokemonFromRemote(
                 pokemonId = _failedFetchPokemonId.value ?: pokeIndex.getRandomId()
             )
@@ -126,7 +128,7 @@ class PokemonViewModel(
                     pokemonId = pokemonId,
                 ).catch {
                     // Retry
-                    getRandomPokemon()
+                    onGetPokemonClicked(tryCache = false)
                 }.collect {
                     it?.let {
                         cachePokemon.invoke(pokemon = it).collect()
