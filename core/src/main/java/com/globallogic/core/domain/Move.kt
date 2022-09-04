@@ -1,6 +1,8 @@
 package com.globallogic.core.domain
 
+/**
+ * A class representing a pokemon move.
+ */
 data class Move(
-    val move: BaseDescription,
-    val versionGroupDetail: List<VersionGroupDetail>?,
+    val name: String,
 )

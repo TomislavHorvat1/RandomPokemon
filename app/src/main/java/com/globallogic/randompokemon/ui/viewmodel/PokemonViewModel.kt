@@ -16,6 +16,14 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 
+/**
+ * A view model that fetches the pokemon index and pokemon. Used for attempting to get the data from a local source if present. If not, the data it fetched from a remote source.
+ *
+ * @param getPokemon the use case for getting a pokemon
+ * @param cachePokemon the use case for caching a pokemon to local storage
+ * @param getPokeIndex the use case for getting the pokemon index
+ * @param cachePokeIndex the use case for caching the pokemon index into the shared preferences
+ */
 class PokemonViewModel(
     private val getPokemon: GetPokemon,
     private val cachePokemon: CachePokemon,
@@ -29,29 +37,35 @@ class PokemonViewModel(
     val pokeIndex: LiveData<PokeIndex?> = _pokeIndex
     private val _failedFetchPokemonId: MutableLiveData<Int?> = MutableLiveData(null)
     val failedFetchPokemonId = _failedFetchPokemonId
-    private var _pokemon: MutableLiveData<Pokemon?> = MutableLiveData()
-    val pokemon: LiveData<Pokemon?> = _pokemon
+    private var _pokemon: MutableLiveData<Pokemon> = MutableLiveData()
+    val pokemon: LiveData<Pokemon> = _pokemon
 
+    /**
+     * Gets the pokemon index from a local or remote source depending on the flag.
+     */
     fun getPokeIndex(fromCache: Boolean = true) {
         if (fromCache) getPokeIndexFromCache()
         else getPokeIndexFromRemote()
     }
 
+    /**
+     * Gets a random pokemon from a local or remote source depending on the flag.
+     */
     fun getRandomPokemon(fromCache: Boolean = true) {
         pokeIndex.value?.let { pokeIndex ->
             if (fromCache) getPokemonFromCache(pokemonId = pokeIndex.getRandomId())
             else getPokemonFromRemote(
                 pokemonId = _failedFetchPokemonId.value ?: pokeIndex.getRandomId()
             )
-        } ?: run {
-            TODO("pokemon index is null, the call was made before the index was fetched. This shouldn't happen")
         }
     }
 
+    /**
+     * Gets the pokemon index from the shared preferences.
+     */
     private fun getPokeIndexFromCache() {
         viewModelScope.launch {
             getPokeIndex.invoke()
-                .catch { }
                 .collect {
                     it?.let {
                         _pokeIndex.value = it
@@ -62,39 +76,48 @@ class PokemonViewModel(
         }
     }
 
+    /**
+     * Gets the pokemon index from the API.
+     */
     private fun getPokeIndexFromRemote() {
         viewModelScope.launch {
-            getPokeIndex.invoke(false)
+            getPokeIndex.invoke(fromCache = false)
                 .catch {
-                    TODO("catch network errors")
-                }.collect {
+                    getPokeIndex()
+                }
+                .collect {
                     it?.let { pokeIndex ->
                         _pokeIndex.value = pokeIndex
                         cachePokeIndex.invoke(pokeIndex = pokeIndex)
                             .collect { _isPokeIndexCached.value = true }
-                    } ?: run {
-                        TODO("server is reachable but the index is otherwise unavailable")
                     }
                 }
         }
     }
 
+    /**
+     * Gets a pokemon from the shared preferences.
+     */
     private fun getPokemonFromCache(pokemonId: Int) {
         viewModelScope.launch {
             try {
-                getPokemon.invoke(pokemonId = pokemonId).collect {
-                    it?.let {
-                        _pokemon.value = it
-                    } ?: run {
-                        failedFetchPokemonId.value = pokemonId
+                getPokemon.invoke(pokemonId = pokemonId)
+                    .collect {
+                        it?.let {
+                            _pokemon.value = it
+                        } ?: run {
+                            failedFetchPokemonId.value = pokemonId
+                        }
                     }
-                }
             } catch (e: Error) {
                 Timber.e(e)
             }
         }
     }
 
+    /**
+     * Gets a pokemon from the API.
+     */
     private fun getPokemonFromRemote(pokemonId: Int) {
         viewModelScope.launch {
             try {
@@ -109,9 +132,6 @@ class PokemonViewModel(
                         cachePokemon.invoke(pokemon = it).collect()
                         _pokemon.value = it
                         _failedFetchPokemonId.value = null
-                    } ?: run {
-                        // Retry
-                        getRandomPokemon()
                     }
                 }
             } catch (e: Error) {
@@ -120,6 +140,9 @@ class PokemonViewModel(
         }
     }
 
+    /**
+     * Picks a random id from the pokemon index.
+     */
     private fun PokeIndex.getRandomId(): Int =
         indexes[Random().nextInt(count - 1)]
 }

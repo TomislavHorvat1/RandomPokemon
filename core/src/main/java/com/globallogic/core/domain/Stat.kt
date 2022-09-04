@@ -1,7 +1,9 @@
 package com.globallogic.core.domain
 
+/**
+ * A class representing a pokemon stat.
+ */
 data class Stat(
-    val baseStat: Long,
-    val effort: Long,
-    val stat: BaseDescription,
+    val name: String,
+    val value: Int,
 )

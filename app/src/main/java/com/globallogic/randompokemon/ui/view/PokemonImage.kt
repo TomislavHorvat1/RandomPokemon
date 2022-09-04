@@ -13,6 +13,9 @@ import coil.request.ErrorResult
 import coil.request.ImageRequest
 import coil.request.SuccessResult
 
+/**
+ * Displays two images side by side
+ */
 @Composable
 fun PokemonImage(
     frontImage: String,

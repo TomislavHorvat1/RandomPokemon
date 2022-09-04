@@ -13,6 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.globallogic.core.domain.Stat
 
+/**
+ * Shows the name, front and back images and the stats of the pokemon
+ */
 @Composable
 fun Pokedex(
     name: String,

@@ -14,6 +14,9 @@ import com.globallogic.randompokemon.ui.view.MainScreen
 import com.globallogic.randompokemon.ui.viewmodel.PokemonViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+/**
+ * The main app activity.
+ */
 class MainActivity : ComponentActivity() {
 
     private val pokemonViewModel: PokemonViewModel by viewModel()
@@ -35,16 +38,7 @@ class MainActivity : ComponentActivity() {
 
         setObservers()
 
-        setContent {
-            RandomPokemonTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    MainScreen(pokemonViewModel = pokemonViewModel)
-                }
-            }
-        }
+        setContent { MainScreen(pokemonViewModel = pokemonViewModel) }
 
         pokemonViewModel.getPokeIndex()
     }

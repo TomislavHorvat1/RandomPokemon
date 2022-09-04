@@ -13,18 +13,20 @@ import com.globallogic.randompokemon.framework.datasource.LocalDataSourceImpl
 import com.globallogic.randompokemon.framework.datasource.RemoteDataSourceImpl
 import com.globallogic.randompokemon.framework.manager.PrefsManager
 import com.globallogic.randompokemon.framework.provider.*
-import com.globallogic.randompokemon.ui.viewmodel.PokemonScreenViewModel
 import com.globallogic.randompokemon.ui.viewmodel.PokemonViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
+/**
+ * A module of all app resources that are injected
+ */
 val appModule = module {
     single { RemoteDataSourceImpl(api = get()) }
     single {
         LocalDataSourceImpl(
             prefsCache = get(),
             pokemonDao = get(),
-            pokemonJsonAdapter = get(),
+            adapter = get(),
         )
     }
     single<PokemonDataSource> {
@@ -55,7 +57,7 @@ val appModule = module {
     single<PrefsCache> {
         PrefsManager(
             context = get(),
-            pokeIndexJasonAdapter = get(),
+            adapter = get(),
         )
     }
 
@@ -69,9 +71,5 @@ val appModule = module {
             getPokeIndex = get(),
             cachePokeIndex = get(),
         )
-    }
-
-    viewModel {
-        PokemonScreenViewModel()
     }
 }

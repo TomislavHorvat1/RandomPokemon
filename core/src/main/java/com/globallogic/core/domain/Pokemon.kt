@@ -1,9 +1,13 @@
 package com.globallogic.core.domain
 
+/**
+ * A class representing a pokemon
+ */
 data class Pokemon(
     val id: Int,
-    val moves: List<Move>,
     val name: String,
-    val sprites: Sprite,
+    val frontImageUrl: String,
+    val backImageUrl: String,
+    val moves: List<String>,
     val stats: List<Stat>,
 )

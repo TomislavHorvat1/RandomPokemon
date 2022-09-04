@@ -10,17 +10,20 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.globallogic.core.domain.Move
-import java.util.*
+import com.globallogic.randompokemon.R
 
+/**
+ * Displays a list title and a column of cards with move names
+ */
 @Composable
 fun PokemonMoves(
-    moves: List<Move>,
+    moves: List<String>,
 ) {
     Column {
         TitleItem()
@@ -28,24 +31,19 @@ fun PokemonMoves(
             items(
                 count = moves.size,
             ) {
-                MoveItem(
-                    moveName = moves[it]
-                        .move
-                        .name
-                        .replaceFirstChar { name ->
-                            if (name.isLowerCase())
-                                name.titlecase(Locale.getDefault())
-                            else name.toString()
-                        })
+                MoveItem(moveName = moves[it])
             }
         }
     }
 }
 
+/**
+ * Displays the list title
+ */
 @Composable
 fun TitleItem() {
     Text(
-        text = "MOVES",
+        text = stringResource(id = R.string.moves_lbl),
         color = Color.DarkGray,
         fontSize = 12.sp,
         fontWeight = FontWeight.Bold,
@@ -56,6 +54,9 @@ fun TitleItem() {
     )
 }
 
+/**
+ * A card item with a text field
+ */
 @Composable
 fun MoveItem(moveName: String) {
     Box(

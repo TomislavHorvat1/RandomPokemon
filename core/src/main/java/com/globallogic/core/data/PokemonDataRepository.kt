@@ -4,6 +4,12 @@ import com.globallogic.core.domain.PokeIndex
 import com.globallogic.core.domain.Pokemon
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * A data repository for all data required by the app. The repo handles getting the data from either local or remote repository.
+ *
+ * @param localDataSource the local data source
+ * @param remoteDataSource the remote data source
+ */
 class PokemonDataRepository private constructor(
     private val localDataSource: PokemonDataSource,
     private val remoteDataSource: PokemonDataSource,

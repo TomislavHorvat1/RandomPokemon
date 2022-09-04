@@ -12,14 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.globallogic.core.domain.BaseDescription
 import com.globallogic.core.domain.Stat
-import com.globallogic.randompokemon.ui.theme.RandomPokemonTheme
-import java.util.*
 
+/**
+ * Displays the stats grid
+ */
 @Composable
 fun PokemonStats(stats: List<Stat>) {
     LazyVerticalGrid(
@@ -27,13 +26,16 @@ fun PokemonStats(stats: List<Stat>) {
     ) {
         items(stats.size) { i ->
             StatCell(
-                name = stats[i].stat.name.uppercase(Locale.getDefault()),
-                value = stats[i].baseStat.toInt(),
+                name = stats[i].name,
+                value = stats[i].value,
             )
         }
     }
 }
 
+/**
+ * A single stat cell with a stat name and value
+ */
 @Composable
 fun StatCell(name: String, value: Int) {
     Box(modifier = Modifier.padding(4.dp)) {
@@ -61,47 +63,5 @@ fun StatCell(name: String, value: Int) {
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun StatCellPreview() {
-    val stats = listOf(
-        Stat(
-            baseStat = 45,
-            effort = 0,
-            stat = BaseDescription(
-                name = "hp",
-                url = "",
-            )
-        ),
-        Stat(
-            baseStat = 13,
-            effort = 0,
-            stat = BaseDescription(
-                name = "attack",
-                url = "",
-            )
-        ),
-        Stat(
-            baseStat = 30,
-            effort = 0,
-            stat = BaseDescription(
-                name = "defence",
-                url = "",
-            )
-        ),
-        Stat(
-            baseStat = 47,
-            effort = 0,
-            stat = BaseDescription(
-                name = "speed",
-                url = "",
-            )
-        ),
-    )
-    RandomPokemonTheme {
-        PokemonStats(stats = stats)
     }
 }

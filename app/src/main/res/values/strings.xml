@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">RandomPokemon</string>
+    <string name="empty_string" />
+
+    <string name="loading_lbl">Loading…</string>
+    <string name="moves_lbl">MOVES</string>
 </resources>

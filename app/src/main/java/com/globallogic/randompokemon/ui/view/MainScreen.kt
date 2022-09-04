@@ -4,26 +4,29 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.globallogic.core.domain.Move
 import com.globallogic.core.domain.Pokemon
 import com.globallogic.core.domain.Stat
 import com.globallogic.randompokemon.R
 import com.globallogic.randompokemon.ui.theme.RandomPokemonTheme
 import com.globallogic.randompokemon.ui.viewmodel.PokemonViewModel
-import timber.log.Timber
-import java.util.*
 
+/**
+ * Holds the root layout of the application UI.
+ *
+ * @param pokemonViewModel a view model used with the UI
+ */
 @Composable
 fun MainScreen(
     pokemonViewModel: PokemonViewModel,
@@ -32,13 +35,9 @@ fun MainScreen(
 
     RandomPokemonTheme {
         RootLayout(
-            name = pokemon?.name?.replaceFirstChar {
-                if (it.isLowerCase()) it.titlecase(
-                    Locale.getDefault()
-                ) else it.toString()
-            } ?: "Loading...",
-            frontImage = pokemon?.sprites?.frontDefault ?: "",
-            backImage = pokemon?.sprites?.backDefault ?: "",
+            name = pokemon?.name ?: stringResource(id = R.string.loading_lbl),
+            frontImage = pokemon?.frontImageUrl ?: stringResource(id = R.string.empty_string),
+            backImage = pokemon?.backImageUrl ?: stringResource(id = R.string.empty_string),
             stats = pokemon?.stats ?: emptyList(),
             moves = pokemon?.moves ?: emptyList(),
             onRefreshClicked = { pokemonViewModel.getRandomPokemon() }
@@ -46,13 +45,16 @@ fun MainScreen(
     }
 }
 
+/**
+ * Holds the Pokedex and Moves list
+ */
 @Composable
 fun RootLayout(
     name: String,
     frontImage: String,
     backImage: String,
     stats: List<Stat>,
-    moves: List<Move>,
+    moves: List<String>,
     onRefreshClicked: (() -> Unit),
 ) {
     Scaffold(
@@ -65,6 +67,21 @@ fun RootLayout(
                     contentDescription = null,
                 )
             }
+        },
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(id = R.string.app_name))
+                },
+                navigationIcon = {
+                    IconButton(onClick = { }) {
+                        Icon(Icons.Filled.Menu, stringResource(id = R.string.empty_string))
+                    }
+                },
+                backgroundColor = MaterialTheme.colors.primary,
+                contentColor = Color.White,
+                elevation = 12.dp
+            )
         }
     ) {
         Surface(
@@ -90,20 +107,5 @@ fun RootLayout(
                 PokemonMoves(moves = moves)
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun RootLayoutPreview() {
-    RandomPokemonTheme {
-        RootLayout(
-            name = "Test",
-            frontImage = "",
-            backImage = "",
-            stats = emptyList(),
-            moves = emptyList(),
-            onRefreshClicked = {},
-        )
     }
 }

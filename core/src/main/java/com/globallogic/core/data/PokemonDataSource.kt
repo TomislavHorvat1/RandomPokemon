@@ -4,6 +4,9 @@ import com.globallogic.core.domain.PokeIndex
 import com.globallogic.core.domain.Pokemon
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * An interface for the data source.
+ */
 interface PokemonDataSource {
     suspend fun getPokemon(fromCache: Boolean = true, pokemonId: Int): Flow<Pokemon?>
     suspend fun getPokeIndex(fromCache: Boolean = true): Flow<PokeIndex?>
