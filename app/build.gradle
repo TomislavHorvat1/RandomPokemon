@@ -56,7 +56,6 @@ dependencies {
     // region KTX
     implementation "androidx.core:core-ktx:$ktx_dependencies.core"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$ktx_dependencies.lifecycle_runtime"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
     // endregion
     // region TIMBER
     implementation "com.jakewharton.timber:timber:$timber_version"
@@ -79,8 +78,6 @@ dependencies {
     // region KOIN
     implementation "io.insert-koin:koin-android:$koin_version"
     implementation "io.insert-koin:koin-android-compat:$koin_version"
-    implementation "io.insert-koin:koin-androidx-workmanager:$koin_version"
-    implementation "io.insert-koin:koin-androidx-navigation:$koin_version"
     // endregion
     // region MOSHI
     implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
